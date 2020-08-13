@@ -20,18 +20,30 @@ public class MaxWaterBottom {
 
     public static int maxArea(int[] height) {
         if(height == null || height.length < 2) return 0;
+        if(height.length == 2) return Math.min(height[0], height[1]);
         int max = 0;
         int i =0,j = height.length - 1;
+        boolean continued = false;
         while (j > i){
+            // 判断这个可以省略，为了节省一次计算，要进行逻辑判断反而3ms -> 4ms 就是说这次挡板相同，移动一次后一定小于这次因为底变短了，高还是最长这次
+            if(continued){
+                i ++;
+                continued = false;
+                continue;
+            }
+            if(height[j] == height[i]) {
+                continued = true;
+            }
             max = Math.max((j - i) *
                             (height[j] > height[i] ? height[i++] : height[j--]),
                     max);
+
         }
         return max;
     }
 
     public static void main(String[] args) {
-        System.out.println(maxArea(new int[]{1,8,6,2,5,4,8,3,7}));
+        System.out.println(maxArea(new int[]{1,3,2,5,25,24,5}));
     }
 
 }
